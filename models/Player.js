@@ -20,8 +20,7 @@ const playerSchema = new Schema({
     required: true
   },
   photoData: {
-    type: Object,
-    required: true
+    type: Object
   },
   team: {
     type: Schema.Types.ObjectId,
