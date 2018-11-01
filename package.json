@@ -1,0 +1,28 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "Caio Chaves",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "cloudinary": "^1.11.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.1.7",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.1",
+    "shelljs": "^0.8.2"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=7.6.0"
+  }
+}
