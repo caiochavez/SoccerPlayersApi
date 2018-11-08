@@ -7,7 +7,7 @@ const userSchema = new Schema({
     required: true
   },
   dateBirth: {
-    type: Date,
+    type: String,
     required: true
   },
   username: {
