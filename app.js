@@ -13,6 +13,9 @@ app.use(morgan('dev'))
 // Connect MongoDB
 require('./services/MongoDBService')
 
+// Graphql
+require('./graphql/index')(app)
+
 // Routes
 require('./routes/index')(app)
 
