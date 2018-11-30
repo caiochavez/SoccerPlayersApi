@@ -1,4 +1,5 @@
-const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID } = require('graphql')
+const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList, GraphQLInt } = require('graphql')
+const { teamData } = require('../datastore')
 
 const type = type => {
   switch (type) {
@@ -6,23 +7,10 @@ const type = type => {
       return { type: GraphQLString }
     case 'id':
       return  { type: GraphQLID }
+    case 'int':
+      return { type: GraphQLInt }
   }
 }
-
-const teamsData = [
-  {
-    id: '1',
-    name: 'Barcelona',
-    country: 'Espanha',
-    photoData: { url: 'barcelona.png' }
-  },
-  {
-    id: '2',
-    name: 'Real Madrid',
-    country: 'Espanha',
-    photoData: { url: 'realmadrid.png' }
-  }
-]
 
 const photoDataType = new GraphQLObjectType({
   name: 'photoData',
@@ -48,8 +36,15 @@ const rootQuery = new GraphQLObjectType({
       type: TeamType,
       args: { id: type('id') },
       resolve ( parent, args ) {
-        const teamFound = teamsData.find(team => team.id === args.id)
+        const teamFound = teamData.find(team => team.id === args.id)
         return teamFound
+      }
+    },
+    teams: {
+      type: new GraphQLList(TeamType),
+      // args: { page: type('int') },
+      resolve ( parent, args ) {
+        return teamData
       }
     }
   }

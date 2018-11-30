@@ -1,4 +1,12 @@
-const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLInt, GraphQLEnumType } = require('graphql')
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLID,
+  GraphQLInt,
+  GraphQLEnumType,
+  GraphQLList } = require('graphql')
+const { playerData } = require('../datastore')
 
 const enumType = new GraphQLEnumType({
   name: 'position',
@@ -24,24 +32,6 @@ const type = type => {
   }
 }
 
-const playersData = [
-  {
-    id: '1',
-    name: 'Neymar',
-    age: 24,
-    nationality: 'Brasil',
-    position: 'attacker',
-    photoData: { url: 'neymar.png' }
-  },
-  {
-    id: '2',
-    name: 'Messi',
-    age: 31,
-    nationality: 'Argentina',
-    position: 'attacker',
-    photoData: { url: 'messi.png' }
-  }
-]
 
 const photoDataType = new GraphQLObjectType({
   name: 'photoData',
@@ -69,8 +59,15 @@ const rootQuery = new GraphQLObjectType({
       type: PlayerType,
       args: { id: type('id') },
       resolve ( parent, args ) {
-        const playerFound = playersData.find(player => player.id === args.id)
+        const playerFound = playerData.find(player => player.id === args.id)
         return playerFound
+      }
+    },
+    players: {
+      type: new GraphQLList(PlayerType),
+      // args: { page: type('int') },
+      resolve ( parent, args ) {
+        return playerData
       }
     }
   }
