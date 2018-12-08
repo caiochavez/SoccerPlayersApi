@@ -1,5 +1,14 @@
-const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList, GraphQLInt } = require('graphql')
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLID,
+  GraphQLList,
+  GraphQLInt
+} = require('graphql')
 const User = require('../../models/User')
+const BcryptService = require('../../services/BcryptService')
+const JWTService = require('../../services/JWTService')
 
 const type = type => {
   switch (type) {
@@ -64,8 +73,26 @@ const Mutation = new GraphQLObjectType({
       args: fields,
       async resolve ( parent, args ) {
         try {
-          let user = await User.create(args)
+          const user = await User.create(args)
           return user
+        } catch (err) {
+          return new Error(err)
+        }
+      }
+    },
+    signIn:{
+      type: UserType,
+      args: { username: type('string'), password: type('string') },
+      async resolve ( parent, { username, password } ) {
+        try {
+          const user = await User.find({username})
+          if (user) {
+            const passwordValid = BcryptService.compareHash(password, user.password)
+            if (passwordValid) {
+              const token = JWTService.sign(user.toJSON())
+              return { user, token }
+            } else throw new Error('Invalid credencials')
+          } else throw new Error('Invalid credencials')
         } catch (err) {
           return new Error(err)
         }

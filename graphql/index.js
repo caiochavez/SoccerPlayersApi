@@ -1,7 +1,7 @@
 const graphqlHTTP = require('express-graphql')
-const userSchemaGraphql = require('./schema/user')
-const teamSchemaGraphql = require('./schema/team')
-const playerSchemaGraphql = require('./schema/player')
+const userSchema = require('./schema/user')
+const teamSchema = require('./schema/team')
+const playerSchema = require('./schema/player')
 
 module.exports = app => {
   const use = (api, schema) => {
@@ -11,7 +11,7 @@ module.exports = app => {
     }))
   }
 
-  use('user', userSchemaGraphql)
-  use('team', teamSchemaGraphql)
-  use('player', playerSchemaGraphql)
+  use('user', userSchema)
+  use('team', teamSchema)
+  use('player', playerSchema)
 }
