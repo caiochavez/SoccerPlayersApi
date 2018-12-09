@@ -4,7 +4,8 @@ const {
   GraphQLSchema,
   GraphQLID,
   GraphQLList,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLInputObjectType
 } = require('graphql')
 const User = require('../../models/User')
 const BcryptService = require('../../services/BcryptService')
@@ -32,6 +33,14 @@ const fields = {
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => fields
+})
+
+const signInType = new GraphQLObjectType({
+  name: 'SignIn',
+  fields: () => ({
+    user: { type: UserType } ,
+    token: type('string')
+  })
 })
 
 const RootQuery = new GraphQLObjectType({
@@ -81,11 +90,11 @@ const Mutation = new GraphQLObjectType({
       }
     },
     signIn:{
-      type: UserType,
+      type: signInType,
       args: { username: type('string'), password: type('string') },
       async resolve ( parent, { username, password } ) {
         try {
-          const user = await User.find({username})
+          const user = await User.findOne({username})
           if (user) {
             const passwordValid = BcryptService.compareHash(password, user.password)
             if (passwordValid) {
