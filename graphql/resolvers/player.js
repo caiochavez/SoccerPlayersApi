@@ -4,7 +4,7 @@ const resolvers = {
 
   async player ({ id }) {
     try {
-      const player = await Player.findById(id) // populate('team)
+      const player = await Player.findById(id).populate('team')
       return player
     } catch (err) {
       return new Error(err)
@@ -14,7 +14,7 @@ const resolvers = {
   async players ({ page }) {
     try {
       page = page - 1
-      const players = await Player.find().limit(10).skip(10 * page) // populate('team)
+      const players = await Player.find().limit(10).skip(10 * page).populate('team')
       return players
     } catch (err) {
       return new Error(err)
