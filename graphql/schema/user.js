@@ -1,116 +1,28 @@
-const {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLSchema,
-  GraphQLID,
-  GraphQLList,
-  GraphQLInt,
-  GraphQLInputObjectType
-} = require('graphql')
-const User = require('../../models/User')
-const BcryptService = require('../../services/BcryptService')
-const JWTService = require('../../services/JWTService')
+const { buildSchema } = require('graphql')
 
-const type = type => {
-  switch (type) {
-    case 'string':
-      return { type: GraphQLString }
-    case 'id':
-      return  { type: GraphQLID }
-    case 'int':
-      return { type: GraphQLInt }
+const schema = buildSchema(`
+  type User {
+    id: ID
+    name: String
+    username: String
+    dateBirth: String
+    password: String
   }
-}
 
-const fields = {
-  id: type('string'),
-  name: type('string'),
-  dateBirth: type('string'),
-  username: type('string'),
-  password: type('string')
-}
-
-const UserType = new GraphQLObjectType({
-  name: 'User',
-  fields: () => fields
-})
-
-const signInType = new GraphQLObjectType({
-  name: 'SignIn',
-  fields: () => ({
-    user: { type: UserType } ,
-    token: type('string')
-  })
-})
-
-const RootQuery = new GraphQLObjectType({
-  name: 'RootQueryType',
-  fields: {
-    user: {
-      type: UserType,
-      args: { id: type('id') },
-      async resolve ( parent, { id } ) {
-        try {
-          const user = await User.findById(id)
-          return user
-        } catch (err) {
-          return new Error(err)
-        }
-      }
-    },
-    users: {
-      type: new GraphQLList(UserType),
-      args: { page: type('int') },
-      async resolve ( parent, { page } ) {
-        try {
-          page = page - 1
-          const users = await User.find().limit(10).skip(10 * page)
-          return users
-        } catch (err) {
-          return new Error(err)
-        }
-      }
-    }
+  type SignIn {
+    user: User,
+    token: String
   }
-})
 
-const Mutation = new GraphQLObjectType({
-  name: 'Mutation',
-  fields: {
-    createUser: {
-      type: UserType,
-      args: fields,
-      async resolve ( parent, args ) {
-        try {
-          const user = await User.create(args)
-          return user
-        } catch (err) {
-          return new Error(err)
-        }
-      }
-    },
-    signIn:{
-      type: signInType,
-      args: { username: type('string'), password: type('string') },
-      async resolve ( parent, { username, password } ) {
-        try {
-          const user = await User.findOne({username})
-          if (user) {
-            const passwordValid = BcryptService.compareHash(password, user.password)
-            if (passwordValid) {
-              const token = JWTService.sign(user.toJSON())
-              return { user, token }
-            } else throw new Error('Invalid credencials')
-          } else throw new Error('Invalid credencials')
-        } catch (err) {
-          return new Error(err)
-        }
-      }
-    }
+  type Query {
+    user ( id: ID! ): User
+    users ( page: Int!  ): [User]
   }
-})
 
-module.exports = new GraphQLSchema({
-  query: RootQuery,
-  mutation: Mutation
-})
+  type Mutation {
+    createUser ( name: String!, username: String!, dateBirth: String!, password: String! ): User
+    signIn ( username: String!, password: String! ): SignIn
+  }
+`)
+
+module.exports = schema
