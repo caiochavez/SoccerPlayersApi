@@ -1,6 +1,9 @@
 const { buildSchema } = require('graphql')
 
 const schema = buildSchema(`
+  directive @isAuthenticated on QUERY | FIELD | FIELD_DEFINITION
+  directive @hasScope(scope: [String]) on QUERY | FIELD | FIELD_DEFINITION
+
   type User {
     id: ID
     name: String
@@ -16,7 +19,7 @@ const schema = buildSchema(`
 
   type Query {
     user ( id: ID! ): User
-    users ( page: Int! ): [User]
+    users ( page: Int!, token: String! ): [User]
   }
 
   type Mutation {

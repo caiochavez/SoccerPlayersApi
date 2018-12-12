@@ -1,6 +1,7 @@
 const User = require('../../models/User')
 const BcryptService = require('../../services/BcryptService')
 const JWTService = require('../../services/JWTService')
+const isAuthenticated = require('../policies/isAuthenticated')
 
 const resolvers = {
 
@@ -13,8 +14,9 @@ const resolvers = {
     }
   },
 
-  async users ({ page }) {
+  async users ({ page, token }) {
     try {
+      await isAuthenticated(token)
       page = page - 1
       const users = await User.find().limit(10).skip(10 * page)
       return users
@@ -33,7 +35,7 @@ const resolvers = {
     }
   },
 
-  async signIn ({ username, password }) {
+  async signIn ({ username, password }, req) {
     try {
       const userFound = await User.findOne({ username })
       if ( userFound ) {
