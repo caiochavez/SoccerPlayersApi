@@ -5,7 +5,9 @@ module.exports = {
   upload (file) {
     return new Promise((resolve, reject) => {
       cloudinary.uploader.upload(file, data => {
-        resolve(data)
+        console.log('Data: ', data)
+        const { public_id, url, secure_url } = data
+        resolve({ public_id, url, secure_url })
       })
     })
   },

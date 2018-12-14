@@ -1,40 +1,31 @@
-const { buildSchema } = require('graphql')
-// const PlayerSchema = require('./player')
-// const Player = PlayerSchema.getType('Player')
-
-const schema = buildSchema(`
+exports.types = `
   type Team {
     id: ID
     name: String
-    country: String
+    country: String,
+    pictureData: PictureData
     players: [Player]
   }
 
-  type Player {
-    id: ID,
+  type PictureData {
+    public_id: ID
+    url: String
+    secure_url: String
+  }
+
+  input fileInput {
     name: String
-    age: Int
-    nationality: String
-    position: Positions
-    team: Team
+    type: String
+    size: Int
+    path: String
   }
+`
 
-  enum Positions {
-    goalkeeper
-    side
-    defender
-    sock
-    attacker
-  }
-  
-  type Query {
-    team ( id: ID! ): Team
-    teams ( page: Int! ): [Team]
-  }
+exports.queries = `
+  team ( id: ID! ): Team
+  teams ( page: Int! ): [Team]
+`
 
-  type Mutation {
-    createTeam ( name: String!, country: String! ): Team
-  }
-`)
-
-module.exports = schema
+exports.mutations = `
+  createTeam ( name: String!, country: String!, file: fileInput ): Team
+`

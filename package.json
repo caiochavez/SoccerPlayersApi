@@ -10,6 +10,7 @@
   "author": "Caio Chaves",
   "license": "ISC",
   "dependencies": {
+    "apollo-upload-server": "^7.1.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.11.0",

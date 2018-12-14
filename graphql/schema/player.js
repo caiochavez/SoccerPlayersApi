@@ -1,8 +1,4 @@
-const { buildSchema } = require('graphql')
-// const TeamSchema = require('./team')
-// const Team = TeamSchema.getType('Team')
-
-const schema = buildSchema(`
+exports.types = `
   type Player {
     id: ID,
     name: String
@@ -19,22 +15,13 @@ const schema = buildSchema(`
     sock
     attacker
   }
+`
 
-  type Team {
-    id: ID
-    name: String
-    country: String
-    players: [Player]
-  }
+exports.queries = `
+  player ( id: ID! ): Player
+  players ( page: Int! ): [Player]
+`
 
-  type Query {
-    player ( id: ID! ): Player
-    players ( page: Int! ): [Player]
-  }
-
-  type Mutation {
-    createPlayer ( name: String!, age: Int!, nationality: String!, position: Positions!, team: ID! ): Player
-  }
-`)
-
-module.exports = schema
+exports.mutations = `
+ createPlayer ( name: String!, age: Int!, nationality: String!, position: Positions!, team: ID! ): Player
+`

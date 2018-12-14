@@ -1,9 +1,4 @@
-const { buildSchema } = require('graphql')
-
-const schema = buildSchema(`
-  directive @isAuthenticated on QUERY | FIELD | FIELD_DEFINITION
-  directive @hasScope(scope: [String]) on QUERY | FIELD | FIELD_DEFINITION
-
+exports.types = `
   type User {
     id: ID
     name: String
@@ -16,16 +11,14 @@ const schema = buildSchema(`
     user: User,
     token: String
   }
+`
 
-  type Query {
-    user ( id: ID! ): User
-    users ( page: Int!, token: String! ): [User]
-  }
+exports.queries = `
+  user ( id: ID! ): User
+  users ( page: Int! ): [User]
+`
 
-  type Mutation {
-    createUser ( name: String!, username: String!, dateBirth: String!, password: String! ): User
-    signIn ( username: String!, password: String! ): SignIn
-  }
-`)
-
-module.exports = schema
+exports.mutations = `
+  createUser ( name: String!, username: String!, dateBirth: String!, password: String! ): User
+  signIn ( username: String!, password: String! ): SignIn
+`
