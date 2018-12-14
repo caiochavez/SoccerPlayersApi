@@ -1,18 +1,21 @@
 const User = require('../../models/User')
 const BcryptService = require('../../services/BcryptService')
 const JWTService = require('../../services/JWTService')
+const isAuthenticated = require('../policies/isAuthenticated')
 
-exports.user = async ({ id }) => {
+exports.user = async ({ id }, { token }) => {
   try {
-    const user = await User.findById(id) 
+    await isAuthenticated(token)
+    const user = await User.findById(id)
     return user
   } catch (err) {
     return new Error(err)
   }
 }
 
-exports.users = async ({ page }) => {
+exports.users = async ({ page }, { token }) => {
   try {
+    await isAuthenticated(token)
     page = page - 1
     const users = await User.find().limit(10).skip(10 * page)
     return users
@@ -21,8 +24,9 @@ exports.users = async ({ page }) => {
   }
 }
 
-exports.createUser = async ({ name, username, dateBirth, password }) => {
+exports.createUser = async ({ name, username, dateBirth, password }, { token }) => {
   try {
+    await isAuthenticated(token)
     password = await BcryptService.generateHash(password)
     const userCreated = await User.create({ name, username, dateBirth, password })
     return userCreated

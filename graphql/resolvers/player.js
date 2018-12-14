@@ -1,7 +1,9 @@
 const Player = require('../../models/Player')
+const isAuthenticated = require('../policies/isAuthenticated')
 
-exports.player = async ({ id }) => {
+exports.player = async ({ id }, { token }) => {
   try {
+    await isAuthenticated(token)
     const player = await Player.findById(id).populate('team')
     return player
   } catch (err) {
@@ -9,8 +11,9 @@ exports.player = async ({ id }) => {
   }
 }
 
-exports.players = async ({ page }) => {
+exports.players = async ({ page }, { token }) => {
   try {
+    await isAuthenticated(token)
     page = page - 1
     const players = await Player.find().limit(10).skip(10 * page).populate('team')
     return players
@@ -19,8 +22,9 @@ exports.players = async ({ page }) => {
   }
 }
 
-exports.createPlayer = async player => {
+exports.createPlayer = async (player, { token }) => {
   try {
+    await isAuthenticated(token)
     const playerCreated = await Player.create(player)
     return playerCreated
   } catch (err) {

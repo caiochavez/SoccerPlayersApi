@@ -7,11 +7,12 @@ module.exports = app => {
   
   app.use (
     '/graphql',
-    graphqlHTTP({
+    graphqlHTTP(( req, res, graphqlParams ) => ({
       schema,
       rootValue,
-      graphiql: true
-    })
+      graphiql: process.env.NODE_ENV === 'production' ? false : true,
+      context: { token: req.headers.authorization }
+    }))
   )
 
 }
