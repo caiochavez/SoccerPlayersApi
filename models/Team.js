@@ -11,7 +11,7 @@ const teamSchema = new Schema({
     type: String,
     required: true
   },
-  photoData: {
+  pictureData: {
     type: Object
   },
   players: [

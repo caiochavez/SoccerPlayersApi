@@ -1,0 +1,6 @@
+{
+  "env": {
+    "MONGODB_URI": "mongodb://heroku_29mvrm39:f4cc56ur908vaqudfirs3euoap@ds145043.mlab.com:45043/heroku_29mvrm39",
+    "CLOUDINARY_URL": "cloudinary://575449681184317:g4H3ZLp25K9ow0liQ2vo-V6rN8Q@hpq7ri2dv"
+  }
+}
