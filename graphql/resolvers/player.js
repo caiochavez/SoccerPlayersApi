@@ -1,4 +1,5 @@
 const Player = require('../../models/Player')
+const Team = require('../../models/Team')
 const isAuthenticated = require('../policies/isAuthenticated')
 
 exports.player = async ({ id }, { token }) => {
@@ -26,6 +27,8 @@ exports.createPlayer = async (player, { token }) => {
   try {
     await isAuthenticated(token)
     const playerCreated = await Player.create(player)
+    const { _id: playerId, team: teamId } = playerCreated
+    await Team.findByIdAndUpdate(teamId, { $push: { players: playerId } })
     return playerCreated
   } catch (err) {
     return new Error(err)

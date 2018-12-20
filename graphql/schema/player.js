@@ -5,6 +5,7 @@ exports.types = `
     age: Int
     nationality: String
     position: Positions
+    pictureData: PictureData
     team: Team
   }
 
@@ -23,5 +24,11 @@ exports.queries = `
 `
 
 exports.mutations = `
- createPlayer ( name: String!, age: Int!, nationality: String!, position: Positions!, team: ID! ): Player
+ createPlayer (
+   name: String!,
+   age: Int!,
+   nationality: String!,
+   position: Positions!,
+   team: ID!
+   file: fileInput ): Player
 `
