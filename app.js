@@ -7,6 +7,9 @@ const dotenv = require('dotenv')
 dotenv.config()
 const port = process.env.PORT || 3000
 
+// Enable Google StackDriver Profiler
+require('@google-cloud/profiler').start()
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(cors())
