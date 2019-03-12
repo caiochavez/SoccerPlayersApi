@@ -24,11 +24,12 @@ exports.queries = `
 `
 
 exports.mutations = `
- createPlayer (
-   name: String!,
-   age: Int!,
-   nationality: String!,
-   position: Positions!,
-   team: ID!
-   file: fileInput ): Player
 `
+
+// createPlayer (
+//   name: String!,
+//   age: Int!,
+//   nationality: String!,
+//   position: Positions!,
+//   team: Team!,
+//   file: fileInput ): Player

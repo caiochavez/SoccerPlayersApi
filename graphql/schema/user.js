@@ -1,6 +1,6 @@
 exports.types = `
   type User {
-    id: ID
+    id: ID!
     name: String
     username: String
     dateBirth: String
@@ -11,11 +11,21 @@ exports.types = `
     user: User,
     token: String
   }
+
+  type metaData {
+    page: Int!
+    rowsPerPage: Int!
+  }
+
+  type paginationData {
+    data: [User]
+    meta: metaData
+  }
 `
 
 exports.queries = `
   user ( id: ID! ): User
-  users ( page: Int! ): [User]
+  users ( page: Int! ): paginationData
 `
 
 exports.mutations = `
